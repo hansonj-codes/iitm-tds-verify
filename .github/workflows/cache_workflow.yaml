@@ -20,9 +20,10 @@ jobs:
         id: cache_job
         
         with:
-          path: ~/testfile.txt
+          path: ~/.npm
           key: cache-26d06d6
 
       - name: prime-cache-26d06d6
-        if: ${{ steps.cache_job.outputs.cache-hit != 'true' }}
-        run: echo "This is a test file to prime the cache" > ~/testfile.txt && echo "Cache missed"
+        env:
+          CACHE_HIT: ${{ steps.cache_job.outputs.cache-hit }}
+        run: echo "Cache missed"
