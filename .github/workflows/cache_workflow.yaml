@@ -20,10 +20,18 @@ jobs:
         id: cache_job
         
         with:
-          path: ~/.npm
+          path: ~/testfile.txt
           key: cache-26d06d6
 
       - name: prime-cache-26d06d6
         env:
           CACHE_HIT: ${{ steps.cache_job.outputs.cache-hit }}
-        run: echo "Cache missed"
+        run: |
+          if [ "$CACHE_HIT" != "true" ]; then
+            echo "Cache miss occurred. Priming the cache..."
+          else
+            echo "Cache hit occurred. No need to prime the cache."
+          fi
+      
+      - name: Create or Update testfile.txt
+        run: echo "This is a test file." > ~/testfile.txt
