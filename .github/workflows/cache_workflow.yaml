@@ -1,0 +1,28 @@
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "cache-environment"
+  cancel-in-progress: false
+
+jobs:
+  cache_job:
+    runs-on: ubuntu-latest
+    id: cache_job
+    steps:
+      - name: Cache example
+        uses: actions/cache@v3
+        with:
+          path: ~/testfile.txt
+        key: cache-26d06d6
+
+      - name: prime-cache-26d06d6
+        if: ${{ steps.cache_job.outputs.cache-hit != 'true' }}
+        run: echo "This is a test file to prime the cache" > ~/testfile.txt && echo "Cache missed"
+
+        
