@@ -1,3 +1,4 @@
+name: Cache Example Workflow
 on:
   workflow_dispatch:
 
@@ -14,15 +15,14 @@ jobs:
   cache_job:
     runs-on: ubuntu-latest
     steps:
-      - name: Cache example
+      - uses: actions/cache@v4
+        name: Cache example
         id: cache_job
-        uses: actions/cache@v4
+        
         with:
           path: ~/testfile.txt
-        key: cache-26d06d6
+          key: cache-26d06d6
 
       - name: prime-cache-26d06d6
         if: ${{ steps.cache_job.outputs.cache-hit != 'true' }}
         run: echo "This is a test file to prime the cache" > ~/testfile.txt && echo "Cache missed"
-
-        
